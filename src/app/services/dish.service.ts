@@ -9,14 +9,27 @@ export class DishService {
 
   // If we use Promise.resolve() then it will give the data available directly so it's good but when we are fecthing from servers it's not best way.
   getDishes(): Promise<Dish[]> {
-    return Promise.resolve(DISHES);
+    return new Promise((resolve) => {
+      //Simulate server latency with 2seconds delay.
+      setTimeout(() => resolve(DISHES), 2000);
+    });
   }
 
   getDish(id: String): Promise<Dish> {
-    return Promise.resolve(DISHES.filter((dish) => dish.id == id)[0]);
+    return new Promise((resolve) => {
+      setTimeout(
+        () => resolve(DISHES.filter((dish) => dish.id == id)[0]),
+        2000
+      );
+    });
   }
 
   getFeaturedDish(): Promise<Dish> {
-    return Promise.resolve(DISHES.filter((dish) => dish.featured)[0]);
+    return new Promise((resolve) => {
+      setTimeout(
+        () => resolve(DISHES.filter((dish) => dish.featured)[0]),
+        2000
+      );
+    });
   }
 }

@@ -14,6 +14,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { AppComponent } from "./app.component";
 
 import "hammerjs";
@@ -59,6 +60,7 @@ import { LoginComponent } from "./login/login.component";
     MatInputModule,
     MatSelectModule,
     MatSlideToggleModule,
+    MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
