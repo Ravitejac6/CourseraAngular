@@ -7,15 +7,16 @@ import { DISHES } from "../shared/dishes";
 export class DishService {
   constructor() {}
 
-  getDishes(): Dish[] {
-    return DISHES;
+  // If we use Promise.resolve() then it will give the data available directly so it's good but when we are fecthing from servers it's not best way.
+  getDishes(): Promise<Dish[]> {
+    return Promise.resolve(DISHES);
   }
 
-  getDish(id: String): Dish {
-    return DISHES.filter((dish) => dish.id == id)[0];
+  getDish(id: String): Promise<Dish> {
+    return Promise.resolve(DISHES.filter((dish) => dish.id == id)[0]);
   }
 
-  getFeaturedDish(): Dish {
-    return DISHES.filter((dish) => dish.featured)[0];
+  getFeaturedDish(): Promise<Dish> {
+    return Promise.resolve(DISHES.filter((dish) => dish.featured)[0]);
   }
 }
