@@ -16,7 +16,7 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
     //Whenever component is instantiated then ngOnInit() method will be called.
-    this.dishService.getDishes().then((dishes) => (this.dishes = dishes));
+    this.dishService.getDishes().subscribe((dishes) => (this.dishes = dishes));
   }
 
   onSelect(dish: Dish) {
