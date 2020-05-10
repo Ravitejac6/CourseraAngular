@@ -3,6 +3,7 @@ import { Dish } from "../shared/dish";
 import { Params, ActivatedRoute } from "@angular/router";
 import { Location } from "@angular/common";
 import { DishService } from "../services/dish.service";
+import { switchMap } from "rxjs/operators";
 
 @Component({
   selector: "app-dishdetail",
@@ -12,6 +13,10 @@ import { DishService } from "../services/dish.service";
 export class DishdetailComponent implements OnInit {
   // @Input() // Here we are getting the input from the another component in the menu.component.html using the [dish]=selectedDish
   dish: Dish;
+  dishIds: string[];
+  prev: string;
+  next: string;
+
   constructor(
     private dishService: DishService,
     private route: ActivatedRoute,
@@ -19,10 +24,30 @@ export class DishdetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    let id = this.route.snapshot.params["id"]; //Fetching parameter from the url
-    this.dishService.getDish(id).subscribe((dish) => (this.dish = dish));
+    //Fetching parameter from the url using params.Here one observable is mapped into the another observable.
+    this.dishService
+      .getDishIds()
+      .subscribe((dishIds) => (this.dishIds = dishIds));
+    const id = this.route.params
+      .pipe(
+        switchMap((params: Params) => this.dishService.getDish(params["id"]))
+      )
+      .subscribe((dish) => {
+        this.dish = dish;
+        this.setPrevNext(dish.id);
+      }); // As we are subscribing always the dishId changes and
+    // wants to track of prev and next that's why here setPrevNext() called.
   }
 
+  setPrevNext(dishId: string) {
+    const index = this.dishIds.indexOf(dishId);
+    this.prev = this.dishIds[
+      (this.dishIds.length + index - 1) % this.dishIds.length
+    ];
+    this.next = this.dishIds[
+      (this.dishIds.length + index + 1) % this.dishIds.length
+    ];
+  }
   goBack(): void {
     this.location.back();
   }
