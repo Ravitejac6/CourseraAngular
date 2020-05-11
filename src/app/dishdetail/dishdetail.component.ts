@@ -5,6 +5,7 @@ import { Location } from "@angular/common";
 import { DishService } from "../services/dish.service";
 import { switchMap } from "rxjs/operators";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { Comment } from "../shared/comment";
 
 @Component({
   selector: "app-dishdetail",
@@ -18,6 +19,7 @@ export class DishdetailComponent implements OnInit {
   prev: string;
   next: string;
   commentForm: FormGroup;
+  newComment: Comment;
 
   @ViewChild("fform") commentFormDirective;
   formErrors = {
@@ -95,6 +97,24 @@ export class DishdetailComponent implements OnInit {
     }
   }
 
+  onSubmit() {
+    this.newComment = new Comment();
+    this.newComment.author = this.commentForm.get("author").value;
+    this.newComment.comment = this.commentForm.get("comment").value;
+    this.newComment.rating = this.commentForm.get("rating").value;
+    this.newComment.date = new Date().toISOString();
+    console.log(this.newComment);
+    // Any new comment is added then it will be added to the particular dish comment.
+    this.dishService
+      .getFeaturedDish()
+      .subscribe((dish) => dish.comments.push(this.newComment));
+    this.commentForm.reset({
+      author: "",
+      rating: 5,
+      comment: "",
+    });
+    this.commentFormDirective.resetForm({ rating: 5 });
+  }
   setPrevNext(dishId: string) {
     const index = this.dishIds.indexOf(dishId);
     this.prev = this.dishIds[

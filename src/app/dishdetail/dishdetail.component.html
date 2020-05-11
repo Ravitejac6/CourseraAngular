@@ -47,6 +47,22 @@
         </p>
       </mat-list-item>
     </mat-list>
+    <!-- Displaying the comment form data -->
+    <div *ngIf="commentForm.valid">
+      <mat-list>
+        <mat-list-item>
+          <p matLine>
+            <span>{{ commentForm.get("comment").value }}</span>
+          </p>
+          <p matLine>
+            <span>{{ commentForm.get("rating").value }} Stars</span>
+          </p>
+          <p matLine>
+            <span>-- {{ commentForm.get("author").value }}</span>
+          </p>
+        </mat-list-item>
+      </mat-list>
+    </div>
     <form
       novalidate
       [formGroup]="commentForm"
