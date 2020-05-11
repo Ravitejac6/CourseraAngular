@@ -47,6 +47,61 @@
         </p>
       </mat-list-item>
     </mat-list>
+    <form
+      novalidate
+      [formGroup]="commentForm"
+      #fform="ngForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <p>
+        <mat-form-field class="full-width">
+          <input
+            type="text"
+            matInput
+            formControlName="author"
+            placeholder="Name"
+            required
+          />
+          <mat-error *ngIf="formErrors.author">{{
+            formErrors.author
+          }}</mat-error>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-slider
+          thumbLabel
+          tickInterval="1"
+          min="1"
+          max="5"
+          step="1"
+          formControlName="rating"
+          value="5"
+        ></mat-slider>
+      </p>
+      <p>
+        <mat-form-field class="full-width">
+          <textarea
+            type="text"
+            matInput
+            formControlName="comment"
+            placeholder="Your Comment"
+            rows="12"
+            required
+          ></textarea>
+          <mat-error *ngIf="formErrors.comment">{{
+            formErrors.comment
+          }}</mat-error>
+        </mat-form-field>
+      </p>
+      <button
+        type="submit"
+        [disabled]="!commentForm.valid"
+        mat-flat-button
+        class="background-primary text-floral-white"
+      >
+        Submit
+      </button>
+    </form>
   </div>
   <!-- This div take care of Loading spinner -->
   <div fxFlex [hidden]="dish">
