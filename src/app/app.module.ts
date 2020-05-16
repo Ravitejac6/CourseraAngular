@@ -33,6 +33,8 @@ import { LeaderService } from "./services/leader.service";
 
 import { AppRoutingModule } from "./app-routing/app-routing.module";
 import { LoginComponent } from "./login/login.component";
+import { HttpClientModule } from "@angular/common/http";
+import { baseURL } from "./shared/baseurl";
 
 @NgModule({
   declarations: [
@@ -66,8 +68,14 @@ import { LoginComponent } from "./login/login.component";
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
+    HttpClientModule,
   ],
-  providers: [DishService, PromotionService, LeaderService],
+  providers: [
+    DishService,
+    PromotionService,
+    LeaderService,
+    { provide: "BaseURL", useValue: baseURL },
+  ],
   entryComponents: [LoginComponent],
   bootstrap: [AppComponent],
 })

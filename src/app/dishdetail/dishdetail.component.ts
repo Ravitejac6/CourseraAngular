@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, Inject } from "@angular/core";
 import { Dish } from "../shared/dish";
 import { Params, ActivatedRoute } from "@angular/router";
 import { Location } from "@angular/common";
@@ -42,7 +42,8 @@ export class DishdetailComponent implements OnInit {
     private dishService: DishService,
     private route: ActivatedRoute,
     private location: Location,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    @Inject("BaseURL") private BaseURL
   ) {
     this.createCommentForm();
   }
@@ -98,16 +99,14 @@ export class DishdetailComponent implements OnInit {
   }
 
   onSubmit() {
-    this.newComment = new Comment();
-    this.newComment.author = this.commentForm.get("author").value;
-    this.newComment.comment = this.commentForm.get("comment").value;
-    this.newComment.rating = this.commentForm.get("rating").value;
+    this.newComment = this.commentForm.value;
     this.newComment.date = new Date().toISOString();
     console.log(this.newComment);
     // Any new comment is added then it will be added to the particular dish comment.
-    this.dishService
-      .getFeaturedDish()
-      .subscribe((dish) => dish.comments.push(this.newComment));
+    // this.dishService
+    //   .getFeaturedDish()
+    //   .subscribe((dish) => dish.comments.push(this.newComment));
+    this.dish.comments.push(this.newComment);
     this.commentForm.reset({
       author: "",
       rating: 5,
