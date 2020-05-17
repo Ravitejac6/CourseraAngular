@@ -21,6 +21,7 @@ export class DishdetailComponent implements OnInit {
   commentForm: FormGroup;
   newComment: Comment;
   errMess: String;
+  dishcopy: Dish;
 
   @ViewChild("fform") commentFormDirective;
   formErrors = {
@@ -54,13 +55,14 @@ export class DishdetailComponent implements OnInit {
     this.dishService
       .getDishIds()
       .subscribe((dishIds) => (this.dishIds = dishIds));
-    const id = this.route.params
+    this.route.params
       .pipe(
         switchMap((params: Params) => this.dishService.getDish(params["id"]))
       )
       .subscribe(
         (dish) => {
           this.dish = dish;
+          this.dishcopy = dish;
           this.setPrevNext(dish.id);
         },
         (errmess) => (this.errMess = <any>errmess)
@@ -106,11 +108,18 @@ export class DishdetailComponent implements OnInit {
     this.newComment = this.commentForm.value;
     this.newComment.date = new Date().toISOString();
     console.log(this.newComment);
-    // Any new comment is added then it will be added to the particular dish comment.
-    // this.dishService
-    //   .getFeaturedDish()
-    //   .subscribe((dish) => dish.comments.push(this.newComment));
-    this.dish.comments.push(this.newComment);
+    this.dishcopy.comments.push(this.newComment);
+    this.dishService.putDish(this.dishcopy).subscribe(
+      (dish) => {
+        this.dish = dish;
+        this.dishcopy = dish;
+      },
+      (errMess) => {
+        this.dish = null;
+        this.dishcopy = null;
+        this.errMess = <any>errMess;
+      }
+    );
     this.commentForm.reset({
       author: "",
       rating: 5,
