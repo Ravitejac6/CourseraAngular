@@ -20,6 +20,7 @@ export class DishdetailComponent implements OnInit {
   next: string;
   commentForm: FormGroup;
   newComment: Comment;
+  errMess: String;
 
   @ViewChild("fform") commentFormDirective;
   formErrors = {
@@ -57,10 +58,13 @@ export class DishdetailComponent implements OnInit {
       .pipe(
         switchMap((params: Params) => this.dishService.getDish(params["id"]))
       )
-      .subscribe((dish) => {
-        this.dish = dish;
-        this.setPrevNext(dish.id);
-      }); // As we are subscribing always the dishId changes and
+      .subscribe(
+        (dish) => {
+          this.dish = dish;
+          this.setPrevNext(dish.id);
+        },
+        (errmess) => (this.errMess = <any>errmess)
+      ); // As we are subscribing always the dishId changes and
     // wants to track of prev and next that's why here setPrevNext() called.
   }
 
