@@ -36,6 +36,7 @@ import { AppRoutingModule } from "./app-routing/app-routing.module";
 import { LoginComponent } from "./login/login.component";
 import { HttpClientModule } from "@angular/common/http";
 import { baseURL } from "./shared/baseurl";
+import { HighlightDirective } from './directives/highlight.directive';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { baseURL } from "./shared/baseurl";
     AboutComponent,
     ContactComponent,
     LoginComponent,
+    HighlightDirective,
   ],
   imports: [
     BrowserModule,
