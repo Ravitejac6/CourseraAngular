@@ -6,11 +6,37 @@ import { DishService } from "../services/dish.service";
 import { switchMap } from "rxjs/operators";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Comment } from "../shared/comment";
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from "@angular/animations";
 
 @Component({
   selector: "app-dishdetail",
   templateUrl: "./dishdetail.component.html",
   styleUrls: ["./dishdetail.component.scss"],
+  animations: [
+    trigger("visibility", [
+      state(
+        "shown",
+        style({
+          transform: "scale(1.0)",
+          opacity: 1,
+        })
+      ),
+      state(
+        "hidden",
+        style({
+          transform: "scale(0.5)",
+          opacity: 0,
+        })
+      ),
+      transition("*=>*", animate("0.5s ease-in-out")),
+    ]),
+  ],
 })
 export class DishdetailComponent implements OnInit {
   // @Input() // Here we are getting the input from the another component in the menu.component.html using the [dish]=selectedDish
@@ -22,6 +48,7 @@ export class DishdetailComponent implements OnInit {
   newComment: Comment;
   errMess: String;
   dishcopy: Dish;
+  visibility = "shown";
 
   @ViewChild("fform") commentFormDirective;
   formErrors = {
@@ -57,13 +84,17 @@ export class DishdetailComponent implements OnInit {
       .subscribe((dishIds) => (this.dishIds = dishIds));
     this.route.params
       .pipe(
-        switchMap((params: Params) => this.dishService.getDish(params["id"]))
+        switchMap((params: Params) => {
+          this.visibility = "hidden"; // For animation.
+          return this.dishService.getDish(params["id"]);
+        })
       )
       .subscribe(
         (dish) => {
           this.dish = dish;
           this.dishcopy = dish;
           this.setPrevNext(dish.id);
+          this.visibility = "shown";
         },
         (errmess) => (this.errMess = <any>errmess)
       ); // As we are subscribing always the dishId changes and
